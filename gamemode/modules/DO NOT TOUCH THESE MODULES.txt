@@ -1,0 +1,4 @@
+Do not add, edit or remove anything from this folder.
+
+Use the FrencgRP Modifications addon instead
+https://github.com/Sxcret/FrenchRP-Modifications
