@@ -1,0 +1,105 @@
+AddCSLuaFile()
+
+if CLIENT then
+    SWEP.PrintName = "Arrest Baton"
+    SWEP.Slot = 1
+    SWEP.SlotPos = 3
+end
+
+DEFINE_BASECLASS("stick_base")
+
+SWEP.Instructions = "Left click to arrest\nRight click to switch batons"
+SWEP.IsFrenchRPArrestStick = true
+
+SWEP.Spawnable = true
+SWEP.Category = "FrenchRP (Utility)"
+
+SWEP.StickColor = Color(255, 0, 0)
+
+SWEP.Switched = true
+
+FrenchRP.hookStub{
+    name = "canArrest",
+    description = "Whether someone can arrest another player.",
+    parameters = {
+        {
+            name = "arrester",
+            description = "The player trying to arrest someone.",
+            type = "Player"
+        },
+        {
+            name = "arrestee",
+            description = "The player being arrested.",
+            type = "Player"
+        }
+    },
+    returns = {
+        {
+            name = "canArrest",
+            description = "A yes or no as to whether the arrester can arrest the arestee.",
+            type = "boolean"
+        },
+        {
+            name = "message",
+            description = "The message that is shown when they can't arrest the player.",
+            type = "string"
+        }
+    },
+    realm = "Server"
+}
+
+function SWEP:Deploy()
+    self.Switched = true
+    return BaseClass.Deploy(self)
+end
+
+function SWEP:PrimaryAttack()
+    BaseClass.PrimaryAttack(self)
+
+    if CLIENT then return end
+
+    self:GetOwner():LagCompensation(true)
+    local trace = util.QuickTrace(self:GetOwner():EyePos(), self:GetOwner():GetAimVector() * 90, {self:GetOwner()})
+    self:GetOwner():LagCompensation(false)
+
+    if IsValid(trace.Entity) and trace.Entity.onArrestStickUsed then
+        trace.Entity:onArrestStickUsed(self:GetOwner())
+        return
+    end
+
+    local ent = self:GetOwner():getEyeSightHitEntity(nil, nil, function(p) return p ~= self:GetOwner() and p:IsPlayer() and p:Alive() end)
+
+    if not IsValid(ent) or (self:GetOwner():EyePos():Distance(ent:GetPos()) > 90) or not ent:IsPlayer() then
+        return
+    end
+
+    local canArrest, message = hook.Call("canArrest", FrenchRP.hooks, self:GetOwner(), ent)
+    if not canArrest then
+        if message then FrenchRP.notify(self:GetOwner(), 1, 5, message) end
+        return
+    end
+
+    -- Send NPCs to Jail
+    if ent:IsNPC() then
+        ent:SetPos(FrenchRP.retrieveJailPos())
+        return
+    end
+
+    ent:arrest(nil, self:GetOwner())
+    FrenchRP.notify(ent, 0, 20, FrenchRP.getPhrase("youre_arrested_by", self:GetOwner():Nick()))
+
+    if self:GetOwner().SteamName then
+        FrenchRP.log(self:GetOwner():Nick() .. " (" .. self:GetOwner():SteamID() .. ") arrested " .. ent:Nick(), Color(0, 255, 255))
+    end
+end
+
+function SWEP:startFrenchRPCommand(usrcmd)
+    if game.SinglePlayer() and CLIENT then return end
+    if usrcmd:KeyDown(IN_ATTACK2) then
+        if not self.Switched and self:GetOwner():HasWeapon("unarrest_stick") then
+            usrcmd:SelectWeapon(self:GetOwner():GetWeapon("unarrest_stick"))
+        end
+    else
+        self.Switched = false
+    end
+end
