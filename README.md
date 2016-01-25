@@ -1,9 +1,8 @@
-For report an issue and know how to report, click here !
-# [How to Report an Issue](https://github.com/Sxcret/FrenchRP/wiki/How-To-Report-Issues)
+# [For know how to Report an Issue, click here](https://github.com/Sxcret/FrenchRP/wiki/How-To-Report-Issues)
 
 Do not ask for help on the GitHub page !
 The GitHub is for bugs and feature requests !
-Just use the forum !
+Just use the forum :
 # [Forum of FrenchRP](http://forum.frenchrp.com/)
 
 
