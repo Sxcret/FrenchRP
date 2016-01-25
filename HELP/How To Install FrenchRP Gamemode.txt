@@ -1,0 +1,5 @@
+For install the FrenchRP Gamemode,
+
+Put the folder "FrenchRp" on the Garry's Mod directory : Steam\SteamApps\common\GarrysMod\garrysmod\gamemodes\
+
+Make sure you d'ont have already a FrenchRP folder, if you had already a FrenchRP folder, delete it.

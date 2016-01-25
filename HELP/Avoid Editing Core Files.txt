@@ -1,0 +1,35 @@
+Avoid editing FrenchRP core files AT ALL COST!
+FrenchRP files are not meant for you to be edited, not even the config folder.
+
+Anything in FrenchRP should be changeable without having to change core FrenchRP files.
+If this isn't possible, it should be MADE possible.
+
+Open an issue on GitHub if there is no
+- FrenchRP function that allows you to change FrenchRP the way you want:
+	http://wiki.frenchrp.com/index.php/Category:Functions
+- FrenchRP Hook that allows you to change FrenchRP the way you want:
+	http://wiki.frenchrp.com/index.php/Category:Hooks
+
+/*---------------------------------------------------------------------------
+            How to configure 
+---------------------------------------------------------------------------*/
+Download https://github.com/Sxcret/FrenchRP-Modifications as an addon and use the
+config folder inside it to configure FrenchRP.
+
+/*---------------------------------------------------------------------------
+            How to modify FrenchRP without modifying the core files
+---------------------------------------------------------------------------*/
+1. Go to frenchrp-modifications/lua/frenchrp_modules
+2. Make a folder with any name, e.g. myFrenchrpmod
+	it has to be lowercase
+	no spaces or weird characters
+3. go into myfrenchrpmod
+4. if you're doing a serverside thing, make a Lua file that starts with sv_
+		e.g. sv_init.lua
+	if you're doing a clientside thing, make a Lua file that starts with cl_
+		e.g. cl_init.lua
+	if you're doing a shared thing, make a Lua file that starts with sh_
+		e.g. sh_init.lua
+
+	if you don't know what serverside/clientside/shared is, you should probably not be trying to modify FrenchRP.
+5. Use the FrenchRP functions and hooks (and other functions/hooks) to make your thing
